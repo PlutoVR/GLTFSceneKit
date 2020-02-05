@@ -884,6 +884,8 @@ public class GLTFUnarchiver {
         let image = try self.loadImage(index: sourceIndex)
         
         let texture = SCNMaterialProperty(contents: image)
+        // enable Texture filtering sample so we get less aliasing when they are farther away
+        texture.mipFilter = .linear
         
         // TODO: retain glTexture.name somewhere
         
@@ -1160,6 +1162,11 @@ public class GLTFUnarchiver {
                     let target = targets[targetIndex]
                     let sources = try self.loadAttributes(target)
                     let geometry = SCNGeometry(sources: sources, elements: nil)
+
+                    if let accessor = self.json.accessors?[target["POSITION"]!], let name = accessor.name {
+                        geometry.name = name
+                    }
+
                     morpher.targets.append(geometry)
                     let weightPath = "childNodes[0].childNodes[\(i)].morpher.weights[\(targetIndex)]"
                     weightPaths.append(weightPath)
