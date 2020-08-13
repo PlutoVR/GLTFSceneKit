@@ -8,7 +8,7 @@
 
 #pragma arguments
 
-float alphaCutOff;
+float alphaCutoff;
 
 #pragma body
 
